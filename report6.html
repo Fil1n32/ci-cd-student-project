@@ -1,0 +1,41 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><style>
+@page { size: A4; margin: 2cm 1.7cm; }
+body { font-family: 'Times New Roman'; font-size: 12pt; line-height: 1.35; }
+h1 { font-size: 16pt; text-align: center; margin: 0 0 6pt; }
+h2 { font-size: 13pt; margin: 12pt 0 6pt; }
+p { margin: 0 0 6pt; text-align: justify; }
+.sub { text-align:center; font-style: italic; margin-bottom: 12pt; }
+.figure { text-align:center; margin: 6pt 0 10pt; }
+.figure img { width: 100%; border:1px solid #999; }
+.caption { font-size: 10pt; font-style: italic; margin-top: 3pt; }
+.code { background:#F4F6F9; border:1px solid #D0D7E2; padding:6pt; margin:6pt 0; }
+.code pre { font-family: Consolas; font-size: 8.5pt; margin:0; white-space: pre-wrap; }
+</style></head><body>
+<h1>Практическая работа № 6</h1>
+<div class="sub">Настройка CI/CD Pipeline с GitHub Actions</div>
+<p>Выполнил(а): ______________________________________ &nbsp;&nbsp; Группа: ______________</p>
+<h2>1. Цель работы</h2>
+<p>Освоить основы непрерывной интеграции с помощью GitHub Actions для автоматического тестирования кода.</p>
+<h2>2. Структура проекта</h2>
+<div class="code"><pre>ci-cd-student-project/
+├── src/calculator.py
+├── tests/test_calculator.py
+├── .github/workflows/ci.yml
+├── requirements.txt
+└── README.md</pre></div>
+<h2>3. Реализация калькулятора и тестов</h2>
+<p>Класс <i>Calculator</i> содержит методы add, subtract, multiply, divide (с проверкой деления на ноль) и power. Тесты на pytest проверяют все операции, включая выброс ValueError.</p>
+<h2>4. Workflow GitHub Actions</h2>
+<p>Файл <i>.github/workflows/ci.yml</i> содержит три задания: <b>test</b> (матрица Python 3.10–3.12, pytest и coverage), <b>lint</b> (flake8, зависит от test) и <b>security</b> (bandit, загрузка HTML-отчёта артефактом).</p>
+<h2>5. Локальная проверка</h2>
+<div class="figure"><img src="logs/01_pytest.png"><div class="caption">Рисунок 1 — Все 6 тестов pytest пройдены</div></div>
+<div class="figure"><img src="logs/03_flake8.png"><div class="caption">Рисунок 2 — flake8: замечаний нет</div></div>
+<h2>6. Ответы на контрольные вопросы</h2>
+<p><b>1. Что происходит при пуше в ветку main?</b><br/>GitHub Actions запускает workflow, у которого в <i>on.push.branches</i> указана ветка main: выполняются задания test, lint и security, при успехе формируется отчёт о покрытии и артефакт.</p>
+<p><b>2. Как матрица стратегии влияет на выполнение тестов?</b><br/>Job test запускается несколько раз — по одному на каждую версию Python из <i>matrix.python-version</i>; тесты должны пройти на всех версиях.</p>
+<p><b>3. Что означает needs: test в job lint?</b><br/>Job lint стартует только после успешного завершения job test.</p>
+<p><b>4. Как можно получить отчет о покрытии кода?</b><br/>Запустить <i>pytest --cov=src --cov-report=xml</i>; файл coverage.xml загружается в Codecov, а локально отчёт выводится в консоль или HTML.</p>
+<p><b>5. Что такое artifact и для чего он используется?</b><br/>Артефакт — файл (отчёт, лог, сборка), сохраняемый workflow и доступный для скачивания после выполнения; в работе так сохраняется security-report.html.</p>
+<h2>7. Вывод</h2>
+<p>Создан проект с калькулятором и тестами, настроен CI-workflow из трёх заданий, локально подтверждено прохождение тестов и отсутствие замечаний flake8. Для публикации требуется разместить проект в GitHub-репозитории и добавить бейдж статуса.</p>
+</body></html>
